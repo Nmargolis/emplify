@@ -5,10 +5,12 @@ import {
   Text,
   Button,
   ToastAndroid,
-  View
+  View,
+  Image
 } from 'react-native';
 
-import Expo, { Audio, FileSystem, Permissions } from 'expo';
+import Expo, { Audio, FileSystem, Permissions, KeepAwake } from 'expo';
+
 
 const ENDPOINT = 'http://fa474678.ngrok.io';
 // const ENDPOINT = 'http://be7a4709.ngrok.io';
@@ -96,9 +98,6 @@ export default class Recording extends Component {
       name: name
     });
 
-    console.log('&&&&& data &&&&&&&')
-    console.log(data)
-
     try {
       const endpoint = ENDPOINT + '/upload';
       console.log('endpoint: ', endpoint);
@@ -109,9 +108,7 @@ export default class Recording extends Component {
         },
         body: data,
       })
-      const json = await res.json()
-      console.log(res);
-      console.log(json);
+
     } catch (err) {
       alert(err)
     }
@@ -159,11 +156,14 @@ export default class Recording extends Component {
   render () {
     return (
       <View style={styles.container}>
+        {/* // <Image style={{width: 300, height: 200}} */}
+        {/* //   source={{uri: './assets/image/placeholder.png'}} /> */}
+        {/* <KeepAwake /> */}
         <Button style={styles.record_button}
-        onPress={this.onPressRecord}
-        title={this.state.recordText}
-        color="#841584"
-        accessibilityLabel="Start Recording"
+          onPress={this.onPressRecord}
+          title={this.state.recordText}
+          color="#841584"
+          accessibilityLabel="Start Recording"
         />
       </View>
     )

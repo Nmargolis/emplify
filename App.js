@@ -5,12 +5,14 @@ import Homescreen from './screens/homescreen';
 import Tipscreen from './screens/tipscreen';
 import Recordscreen from './screens/recordscreen';
 import Intentscreen from './screens/intentscreen';
+import Resultscreen from './screens/resultscreen';
 
 const SimpleApp = StackNavigator({
   Home: { screen: Homescreen },
   Intent: {screen: Intentscreen},
   Tips: { screen: Tipscreen },
-  Record: { screen: Recordscreen }
+  Record: { screen: Recordscreen },
+  Results: {screen: Resultscreen }
 });
 
 
