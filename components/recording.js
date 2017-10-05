@@ -10,7 +10,8 @@ import {
 
 import Expo, { Audio, FileSystem, Permissions } from 'expo';
 
-const ENDPOINT = 'http://ccfaa2b1.ngrok.io:5000';
+const ENDPOINT = 'http://fa474678.ngrok.io';
+// const ENDPOINT = 'http://be7a4709.ngrok.io';
 
 const RecordingOptions = {
   android: {
@@ -83,18 +84,24 @@ export default class Recording extends Component {
 
   async _sendAudioToServer(uri: string) {
     let path = uri
+    let name = uri.split('AV/')[1]
+    console.log(name);
     console.log('in send audio to server');
     console.log(path);
 
     const data = new FormData();
     data.append('file', {
       uri: path,
-      type: 'audio/m4a',
-      name: 'testname'
+      type: 'audio/x-caf',
+      name: name
     });
+
+    console.log('&&&&& data &&&&&&&')
+    console.log(data)
 
     try {
       const endpoint = ENDPOINT + '/upload';
+      console.log('endpoint: ', endpoint);
       const res = await fetch(endpoint, { //todo
         method: 'POST',
         headers: {
@@ -103,6 +110,8 @@ export default class Recording extends Component {
         body: data,
       })
       const json = await res.json()
+      console.log(res);
+      console.log(json);
     } catch (err) {
       alert(err)
     }
@@ -122,7 +131,7 @@ export default class Recording extends Component {
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
     });
     this.setState({isRecording: false, recordText: 'Done recording'})
-    this._sendAudioToServer(JSON.stringify(info.uri)).then(data => console.log(data));
+    this._sendAudioToServer(info.uri).then(data => console.log(data));
     //ToastAndroid.show(`FILE INFO: ${JSON.stringify(info)}`, ToastAndroid.LONG);
   }
 
