@@ -9,11 +9,15 @@ import {
 
 import Expo, { Asset, Font } from 'expo';
 
-export default class HomeScreen extends React.Component {
+// const ENDPOINT = 'http://fa474678.ngrok.io';
+const ENDPOINT = 'http://be7a4709.ngrok.io';
+
+export default class Resultscreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       fontLoaded: false,
+      results: null
     }
   }
 
@@ -28,19 +32,28 @@ export default class HomeScreen extends React.Component {
         });
         this.setState({ fontLoaded: true });
       })();
-    }
+
+      (async () => {
+        try {
+          const endpoint = ENDPOINT + '/results'
+          let response = await fetch(endpoint);
+          let responseJson = await response.json();
+          this.setState({results: responseJson})
+          console.log()
+          return responseJson;
+        } catch(error) {
+          console.error(error);
+        }
+      })();
+  }
 
   render() {
     const { navigate } = this.props.navigation;
-    if(this.state.fontLoaded) {
+    if(this.state.fontLoaded && this.state.results) {
     return (
       <View style={styles.container}>
 
         <View style={styles.top_view}>
-          <TouchableHighlight onPress={() => 
-            navigate('Results')}>
-            <Text> Result </Text>
-          </TouchableHighlight>
         </View>
 
         <TouchableHighlight style={styles.ally_view}

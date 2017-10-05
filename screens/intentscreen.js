@@ -2,18 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Recording from '../components/recording';
 
-
-export default class Recordscreen extends React.Component {
+export default class Intentscreen extends React.Component {
   static navigationOptions = {
-    title: 'Record',
+    title: 'Choose your role',
   };
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View>
-        {/* <KeepAwake /> */}
-        <Recording type='facilitate'/>
-      </View>
+      <Recording type='intent'/>
     );
   }
 }
@@ -22,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

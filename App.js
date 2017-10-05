@@ -1,23 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import Recording from './recording';
 import Homescreen from './screens/homescreen';
 import Tipscreen from './screens/tipscreen';
 import Recordscreen from './screens/recordscreen';
+import Intentscreen from './screens/intentscreen';
+import Resultscreen from './screens/resultscreen';
 
-const SimpleApp = StackNavigator(
-  {
-    Home: { screen: Homescreen },
-    Tips: { screen: Tipscreen },
-    Record: { screen: Recordscreen }
-  },
-  // {
-  //   cardStyle: {
-  //     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
-  //   }
-  // }
-);
+const SimpleApp = StackNavigator({
+  Home: { screen: Homescreen },
+  Intent: {screen: Intentscreen},
+  Tips: { screen: Tipscreen },
+  Record: { screen: Recordscreen },
+  Results: {screen: Resultscreen }
+});
 
 
 export default class App extends React.Component {
@@ -25,13 +21,6 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <SimpleApp />
-
-        {/* <Navigator
-          style={{ flex:1 }}
-          initialRoute={{ name: 'Main' }}
-          renderScene={ this.renderScene } /> */}
-        {/* <Text>More text </Text> */}
-        {/* <Recording /> */}
       </View>
     );
   }
@@ -41,7 +30,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
 });

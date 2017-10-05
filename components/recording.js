@@ -5,10 +5,15 @@ import {
   Text,
   Button,
   ToastAndroid,
-  View
+  View,
+  Image
 } from 'react-native';
 
-import Expo, { Audio, FileSystem, Permissions } from 'expo';
+import Expo, { Audio, FileSystem, Permissions, KeepAwake } from 'expo';
+
+
+const ENDPOINT = 'http://fa474678.ngrok.io';
+// const ENDPOINT = 'http://be7a4709.ngrok.io';
 
 const RecordingOptions = {
   android: {
@@ -32,14 +37,21 @@ const RecordingOptions = {
   },
 };
 
+const RecordingPrompt = {
+  intent: 'What is your goal?',
+  facilitate: 'Start recording meeting'
+}
+
 export default class Recording extends Component {
   constructor(props){
     super(props);
+    const { type } = this.props
+    const promptText = RecordingPrompt[type];
     this.recording = null;
     this.state = {
       haveRecordingPermissions: false,
       isRecording: false,
-      recordText: 'Start Recording'
+      recordText: promptText
     };
     this.recordingSettings = JSON.parse(
       JSON.stringify(RecordingOptions)
@@ -72,9 +84,41 @@ export default class Recording extends Component {
 
   }
 
+  async _sendAudioToServer(uri: string) {
+    let path = uri
+    let name = uri.split('AV/')[1]
+    console.log(name);
+    console.log('in send audio to server');
+    console.log(path);
+
+    const data = new FormData();
+    data.append('file', {
+      uri: path,
+      type: 'audio/x-caf',
+      name: name
+    });
+
+    try {
+      const endpoint = ENDPOINT + '/upload';
+      console.log('endpoint: ', endpoint);
+      const res = await fetch(endpoint, { //todo
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: data,
+      })
+
+    } catch (err) {
+      alert(err)
+    }
+  }
+
   async _stopRecording () {
     const info = await FileSystem.getInfoAsync(this.recording.getURI());
+    
     console.log(`FILE INFO: ${JSON.stringify(info)}`); //info.uri to get file dir
+    
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -83,34 +127,11 @@ export default class Recording extends Component {
       shouldDuckAndroid: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
     });
-    this.setState({isRecording: false, recordText: 'Start Recording'})
-    //_sendAudioToServer(JSON.stringify(info.uri));
+    this.setState({isRecording: false, recordText: 'Done recording'})
+    this._sendAudioToServer(info.uri).then(data => console.log(data));
     //ToastAndroid.show(`FILE INFO: ${JSON.stringify(info)}`, ToastAndroid.LONG);
   }
 
-  async _sendAudioToServer(uri: string) {
-    let path = uri
-
-    const data = new FormData();
-    data.append('photo', {
-      uri: path,
-      type: 'audio/m4a',
-      name: 'testname'
-    });
-
-    try {
-      const res = await fetch('example.com', { //todo
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: data,
-      })
-      const json = await res.json()
-    } catch (err) {
-      alert(err)
-    }
-  }
 
   onPressRecord = () => {
     if(!this.state.isRecording) {
@@ -135,11 +156,14 @@ export default class Recording extends Component {
   render () {
     return (
       <View style={styles.container}>
+        {/* // <Image style={{width: 300, height: 200}} */}
+        {/* //   source={{uri: './assets/image/placeholder.png'}} /> */}
+        {/* <KeepAwake /> */}
         <Button style={styles.record_button}
-        onPress={this.onPressRecord}
-        title={this.state.recordText}
-        color="#841584"
-        accessibilityLabel="Start Recording"
+          onPress={this.onPressRecord}
+          title={this.state.recordText}
+          color="#841584"
+          accessibilityLabel="Start Recording"
         />
       </View>
     )
