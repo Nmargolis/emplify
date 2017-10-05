@@ -5,6 +5,7 @@ import {
   Text,
   Button,
   ToastAndroid,
+  TouchableHighlight,
   View,
   Image
 } from 'react-native';
@@ -116,9 +117,9 @@ export default class Recording extends Component {
 
   async _stopRecording () {
     const info = await FileSystem.getInfoAsync(this.recording.getURI());
-    
+
     console.log(`FILE INFO: ${JSON.stringify(info)}`); //info.uri to get file dir
-    
+
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -153,18 +154,36 @@ export default class Recording extends Component {
   }
 
 
+
+
   render () {
     return (
+      // <View style={styles.container}>
+      //   // {/* // <Image style={{width: 300, height: 200}} */}
+      //   // {/* //   source={{uri: './assets/image/placeholder.png'}} /> */}
+      //   // {/* <KeepAwake /> */}
+      //   <Button style={styles.record_button}
+      //     onPress={this.onPressRecord}
+      //     title={this.state.recordText}
+      //     color="#841584"
+      //     accessibilityLabel="Start Recording"
+      //   />
+      // </View>
       <View style={styles.container}>
-        {/* // <Image style={{width: 300, height: 200}} */}
-        {/* //   source={{uri: './assets/image/placeholder.png'}} /> */}
-        {/* <KeepAwake /> */}
+
+      <View style={styles.footerContainer}>
+        <Text style={styles.convo_text}>RECORD YOUR CONVO</Text>
+        <View style={styles.actionButton}>
         <Button style={styles.record_button}
-          onPress={this.onPressRecord}
-          title={this.state.recordText}
-          color="#841584"
-          accessibilityLabel="Start Recording"
-        />
+            onPress={this.onPressRecord}
+            title="o"
+            color="white"
+            accessibilityLabel="Start Recording"
+          />
+        </View>
+        <Text style={styles.record_text}>{this.state.recordText}</Text>
+      </View>
+
       </View>
     )
   }
@@ -172,11 +191,52 @@ export default class Recording extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#EDC45B'
+
+    //justifyContent: 'center',
+    backgroundColor: '#5100FF'
   },
   record_button: {
-  }
+    width:80,
+    height: 80,
+  },
+  record_text: {
+    alignItems: 'center',
+    paddingBottom: 14,
+    paddingTop: 14,
+    justifyContent: 'center',
+    color: "#ffffff",
+  },
+  convo_text: {
+    alignItems: 'center',
+    paddingBottom: 14,
+    paddingTop: 14,
+    justifyContent: 'center',
+    color: "#ffffff",
+    fontWeight: 'bold',
+  },
+  footerContainer: {
+    alignItems: 'center',
+    paddingBottom: 14,
+    paddingTop: 14,
+    justifyContent: 'center',
+  },
+  actionButton: {
+    width:80,
+    height: 80,
+    padding: 14,
+    paddingLeft:18,
+    paddingRight:18,
+    margin: 8,
+    backgroundColor: '#EFC45B',
+    borderRadius: 80/2,
+    elevation:3,
+		shadowColor: "#000000",
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		shadowOffset: {
+			height: 3,
+			width: 0
+		}
+  },
 });
