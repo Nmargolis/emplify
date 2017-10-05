@@ -12,19 +12,19 @@ export default class HomeScreen extends React.Component {
         <Button
           title="Be an ally"
           onPress={() =>
-            navigate('Tips', { role: 'Ally' })
+            navigate('Intent', { role: 'Ally' })
           }
         />
         <Button
           title="Be empowered"
           onPress={() =>
-            navigate('Tips', { role: 'Empowered' })
+            navigate('Intent', { role: 'Empowered' })
           }
         />
         <Button
           title="Be a facilitator"
           onPress={() =>
-            navigate('Tips', { role: 'Facilitator' })
+            navigate('Intent', { role: 'Facilitator' })
           }
         />
       </View>

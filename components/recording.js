@@ -10,6 +10,8 @@ import {
 
 import Expo, { Audio, FileSystem, Permissions } from 'expo';
 
+const ENDPOINT = 'http://ccfaa2b1.ngrok.io:5000';
+
 const RecordingOptions = {
   android: {
     extension: '.m4a',
@@ -32,14 +34,21 @@ const RecordingOptions = {
   },
 };
 
+const RecordingPrompt = {
+  intent: 'What is your goal?',
+  facilitate: 'Start recording meeting'
+}
+
 export default class Recording extends Component {
   constructor(props){
     super(props);
+    const { type } = this.props
+    const promptText = RecordingPrompt[type];
     this.recording = null;
     this.state = {
       haveRecordingPermissions: false,
       isRecording: false,
-      recordText: 'Start Recording'
+      recordText: promptText
     };
     this.recordingSettings = JSON.parse(
       JSON.stringify(RecordingOptions)
@@ -72,34 +81,21 @@ export default class Recording extends Component {
 
   }
 
-  async _stopRecording () {
-    const info = await FileSystem.getInfoAsync(this.recording.getURI());
-    console.log(`FILE INFO: ${JSON.stringify(info)}`); //info.uri to get file dir
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      playsInSilentLockedModeIOS: true,
-      shouldDuckAndroid: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-    });
-    this.setState({isRecording: false, recordText: 'Start Recording'})
-    //_sendAudioToServer(JSON.stringify(info.uri));
-    //ToastAndroid.show(`FILE INFO: ${JSON.stringify(info)}`, ToastAndroid.LONG);
-  }
-
   async _sendAudioToServer(uri: string) {
     let path = uri
+    console.log('in send audio to server');
+    console.log(path);
 
     const data = new FormData();
-    data.append('photo', {
+    data.append('file', {
       uri: path,
       type: 'audio/m4a',
       name: 'testname'
     });
 
     try {
-      const res = await fetch('example.com', { //todo
+      const endpoint = ENDPOINT + '/upload';
+      const res = await fetch(endpoint, { //todo
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -111,6 +107,25 @@ export default class Recording extends Component {
       alert(err)
     }
   }
+
+  async _stopRecording () {
+    const info = await FileSystem.getInfoAsync(this.recording.getURI());
+    
+    console.log(`FILE INFO: ${JSON.stringify(info)}`); //info.uri to get file dir
+    
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      playsInSilentLockedModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+    });
+    this.setState({isRecording: false, recordText: 'Done recording'})
+    this._sendAudioToServer(JSON.stringify(info.uri)).then(data => console.log(data));
+    //ToastAndroid.show(`FILE INFO: ${JSON.stringify(info)}`, ToastAndroid.LONG);
+  }
+
 
   onPressRecord = () => {
     if(!this.state.isRecording) {

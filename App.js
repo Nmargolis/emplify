@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import Recording from './recording';
 import Homescreen from './screens/homescreen';
 import Tipscreen from './screens/tipscreen';
 import Recordscreen from './screens/recordscreen';
+import Intentscreen from './screens/intentscreen';
 
 const SimpleApp = StackNavigator({
   Home: { screen: Homescreen },
+  Intent: {screen: Intentscreen},
   Tips: { screen: Tipscreen },
   Record: { screen: Recordscreen }
 });
@@ -18,13 +19,6 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <SimpleApp />
-        
-        {/* <Navigator
-          style={{ flex:1 }}
-          initialRoute={{ name: 'Main' }}
-          renderScene={ this.renderScene } /> */}
-        {/* <Text>More text </Text> */}
-        {/* <Recording /> */}
       </View>
     );
   }
@@ -34,8 +28,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
 });
 
