@@ -13,6 +13,10 @@ export default class Recordscreen extends React.Component {
       <View>
         {/* <KeepAwake /> */}
         <Recording type='facilitate'/>
+        <TouchableHighlight style={{backgroundColor: 'red'}} onPress={() => 
+            navigate('Results')}>
+            <Text style={{color:'black'}}> Result </Text>
+          </TouchableHighlight>
       </View>
     );
   }

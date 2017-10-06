@@ -9,8 +9,8 @@ import {
 
 import Expo, { Asset, Font } from 'expo';
 
-// const ENDPOINT = 'http://fa474678.ngrok.io';
-const ENDPOINT = 'http://be7a4709.ngrok.io';
+const ENDPOINT = 'http://fa474678.ngrok.io';
+// const ENDPOINT = 'http://be7a4709.ngrok.io';
 
 export default class Resultscreen extends React.Component {
   constructor(props) {

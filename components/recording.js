@@ -7,7 +7,8 @@ import {
   ToastAndroid,
   TouchableHighlight,
   View,
-  Image
+  Image,
+  Platform
 } from 'react-native';
 
 import Expo, { Audio, FileSystem, Permissions, KeepAwake } from 'expo';
@@ -92,10 +93,12 @@ export default class Recording extends Component {
     console.log('in send audio to server');
     console.log(path);
 
+    ext = '.caf' ? Platform == 'ios' : '.m4a'
+    console.log(ext)
     const data = new FormData();
     data.append('file', {
       uri: path,
-      type: 'audio/x-caf',
+      type: `audio/x-${ext}`,
       name: name
     });
 
